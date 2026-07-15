@@ -20,8 +20,8 @@ jobs:
           YOUTUBE_URL: ${{ secrets.YOUTUBE_URL }}
           YOUTUBE_KEY: ${{ secrets.YOUTUBE_KEY }}
         run: |
-          # لێرەدا فەرمانەکە دەگۆڕین بۆ ئەوەی ڕاستەوخۆ لینکەکە بخوێنێتەوە
-          ffmpeg -re -stream_loop -1 -i "https://archive.org/download/amazon-rainforest-sounds/amazon-1.mp4" \
+          # لینکێکی یەدەگ کە زیاتر جێگیرە
+          ffmpeg -re -stream_loop -1 -i "https://archive.org/download/BigBuckBunny_124/Content/big_buck_bunny_720p_surround.mp4" \
           -c:v libx264 -preset veryfast -b:v 2000k -maxrate 2000k -bufsize 4000k \
           -g 60 -c:a aac -b:a 128k -ar 44100 \
           -f flv "${YOUTUBE_URL}/${YOUTUBE_KEY}"
