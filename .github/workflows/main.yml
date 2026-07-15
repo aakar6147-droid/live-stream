@@ -10,17 +10,17 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 1440
     steps:
-      - name: Setup FFmpeg & Environment
+      - name: Install FFmpeg
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
           
       - name: Start Professional Stream
         env:
           YOUTUBE_URL: ${{ secrets.YOUTUBE_URL }}
           YOUTUBE_KEY: ${{ secrets.YOUTUBE_KEY }}
-          # لینکێکی نوێ و زۆر جێگیرتر
+          # لینکێکی زۆر خێرا و جێگیر
           VIDEO_URL: "https://www.w3schools.com/html/mov_bbb.mp4"
         run: |
           ffmpeg -re -stream_loop -1 -i "${VIDEO_URL}" \
-          -c:v libx264 -preset veryfast -b:v 3000k -maxrate 3000k -bufsize 6000k \
+          -c:v libx264 -preset ultrafast -tune zerolatency -b:v 2500k \
           -pix_fmt yuv420p -g 60 -c:a aac -b:a 128k -ar 44100 \
           -f flv "${YOUTUBE_URL}/${YOUTUBE_KEY}"
