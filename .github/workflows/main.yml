@@ -15,27 +15,13 @@ jobs:
       - name: Install FFmpeg
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
 
-      - name: Create Playlist
-        run: |
-          cat <<EOF > playlist.txt
-          file 'https://archive.org/download/amazon-rainforest-sounds/amazon-1.mp4'
-          file 'https://archive.org/download/amazon-rainforest-sounds/amazon-2.mp4'
-          file 'https://archive.org/download/amazon-rainforest-sounds/amazon-3.mp4'
-          file 'https://archive.org/download/amazon-rainforest-sounds/amazon-4.mp4'
-          file 'https://archive.org/download/amazon-rainforest-sounds/amazon-5.mp4'
-          file 'https://archive.org/download/amazon-rainforest-sounds/amazon-6.mp4'
-          file 'https://archive.org/download/amazon-rainforest-sounds/amazon-7.mp4'
-          file 'https://archive.org/download/amazon-rainforest-sounds/amazon-8.mp4'
-          file 'https://archive.org/download/amazon-rainforest-sounds/amazon-9.mp4'
-          file 'https://archive.org/download/amazon-rainforest-sounds/amazon-10.mp4'
-          EOF
-
       - name: Start Stream
         env:
           YOUTUBE_URL: ${{ secrets.YOUTUBE_URL }}
           YOUTUBE_KEY: ${{ secrets.YOUTUBE_KEY }}
         run: |
-          ffmpeg -re -f concat -safe 0 -i playlist.txt \
+          # لێرەدا فەرمانەکە دەگۆڕین بۆ ئەوەی ڕاستەوخۆ لینکەکە بخوێنێتەوە
+          ffmpeg -re -stream_loop -1 -i "https://archive.org/download/amazon-rainforest-sounds/amazon-1.mp4" \
           -c:v libx264 -preset veryfast -b:v 2000k -maxrate 2000k -bufsize 4000k \
           -g 60 -c:a aac -b:a 128k -ar 44100 \
           -f flv "${YOUTUBE_URL}/${YOUTUBE_KEY}"
