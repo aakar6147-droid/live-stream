@@ -1,27 +1,27 @@
-name: 24/7 Amazon Forest Stream
+name: 24/7 Professional Amazon Stream
 on:
   push:
     branches:
       - main
   workflow_dispatch:
-  schedule:
-    - cron: '0 * * * *'
 
 jobs:
   stream:
     runs-on: ubuntu-latest
     timeout-minutes: 1440
     steps:
-      - name: Install FFmpeg
-        run: sudo apt-get update && sudo apt-get install -y ffmpeg
-
-      - name: Start Stream
+      - name: Setup FFmpeg & Environment
+        run: |
+          sudo apt-get update && sudo apt-get install -y ffmpeg
+          
+      - name: Start Professional Stream
         env:
           YOUTUBE_URL: ${{ secrets.YOUTUBE_URL }}
           YOUTUBE_KEY: ${{ secrets.YOUTUBE_KEY }}
+          # لینکێکی جێگیر و کوالێتی بەرز بۆ دارستانی ئەمازۆن
+          VIDEO_URL: "https://archive.org/download/amazon-rainforest-4k/amazon-rainforest-4k.mp4"
         run: |
-          # لینکێکی یەدەگ کە زیاتر جێگیرە
-          ffmpeg -re -stream_loop -1 -i "https://archive.org/download/BigBuckBunny_124/Content/big_buck_bunny_720p_surround.mp4" \
-          -c:v libx264 -preset veryfast -b:v 2000k -maxrate 2000k -bufsize 4000k \
-          -g 60 -c:a aac -b:a 128k -ar 44100 \
+          ffmpeg -re -stream_loop -1 -i "${VIDEO_URL}" \
+          -c:v libx264 -preset veryfast -b:v 4500k -maxrate 4500k -bufsize 9000k \
+          -pix_fmt yuv420p -g 60 -c:a aac -b:a 192k -ar 44100 \
           -f flv "${YOUTUBE_URL}/${YOUTUBE_KEY}"
